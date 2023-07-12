@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <title>Display</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-image: url("{% static 'images/7410.jpeg' %}");
+            background-repeat: no-repeat;
+            background-size: cover;
+            overflow: hidden;
+        }
+        .heading{
+            text-align: center; 
+            padding: 2%;
+        }
+        .card:hover{
+            transition: 0.5s;
+            scale: 1.1;
+        }
+        .user{
+            margin: 1% 4%;
+        }
+        .but, .device, .location:active, .addD{
+            width: 115px;
+            height: 40px;
+            background: linear-gradient(180deg, #51D2FC 0%, #0099DC 100%);
+            border-radius: 10rem;
+            font-size: 16px;
+            line-height: 1.6rem;
+        }
+        .device:active, .location{
+            width: 115px;
+            height: 40px;
+            background: White;
+            border-radius: 10rem;
+            font-size: 16px;
+            line-height: 1.6rem;
+        }
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+        .card {
+            width: 100%;
+        }
+        .call{
+            height: 100vh;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="call">
+    <h1 class="heading">Admin User Management System</h1>
+    {% if user.user_type == "admin" %}
+        <div class="user">
+            <h2 style="display:inline; margin-right: 74%;">Welcome, Admin!</h2>
+            <a href="{% url 'logout' %}"><button class="but">Logout</button></a>
+            <br><br>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Contact</th>
+                        <th>User Type</th>
+                        <th>Edit</th>
+                        </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-active">
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.address }}</td>
+                        <td>{{ user.contact }}</td>
+                        <td>{{ user.user_type }}</td>
+                        <td><a href="{% url 'editUser' id=user.id %}"><button type="button" class="btn btn-secondary">Edit</button></a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <a href="{% url 'addUser' id=0 %}"><button class="addD">Add Users</button></a>
+            <br><br>
+            
+            <h2 class="user-heading">Users Details</h2>
+
+            {% for user_detail in user_details %}
+                {% if user_detail.user_type == "user" %}
+                    <h3>User {{ user_detail.first_name }}:</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Contact</th>
+                                <th>User Type</th>
+                                <th>Edit</th>
+                                {% comment %} <th>Delete</th> {% endcomment %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-active">
+                                <td>{{ user_detail.first_name }}</td>
+                                <td>{{ user_detail.last_name }}</td>
+                                <td>{{ user_detail.email }}</td>
+                                <td>{{ user_detail.address }}</td>
+                                <td>{{ user_detail.contact }}</td>
+                                <td>{{ user_detail.user_type }}</td>
+                                <td><a href="{% url 'editUser' id=user_detail.id %}"><button type="button" class="btn btn-secondary">Edit</button></a></td>
+                                {% comment %} <td><a href="{% url 'display' %}"><button type="button" class="btn btn-secondary">Delete</button></a></td> {% endcomment %}
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <a href="{% url 'addDevice' user_detail.id %}"><button class="addD">Add Device</button></a>
+                    <br><br>    
+                    <div style="display: flex; justify-content: center;">
+                        <div class="card-container">
+                            {% for device in user_detail.device_set.all %}
+                                <div class="card" style="width: 18rem; background-color: #8EC5FC; background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Device:</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">{{ device.name }} - {{ device.type }} - {{ device.price }}</h6>
+                                        <h5 class="card-title">Location:</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">{{ device.location.name }} - {{ device.location.address }} - {{ device.location.pin }}</h6>
+                                        <a href="{% url 'editDevice' device.id %}" class="card-link"><button class="device">Edit Info</button></a>
+                                        <a href="{% url 'deleteDevice' device.id %}" class="card-link"><button class="location">Delete Info</button></a>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <div class="noDevice">
+                                    <h3>No devices found.</h3>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <br>
+                {% endif %}
+
+            {% empty %}
+                <tr>
+                    <td colspan="7">No user details found.</td>
+                </tr>
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+        <div class="user">
+            <h2 style="display:inline; margin-right: 74%;">Welcome, User!</h2>
+            <a href="{% url 'logout' %}"><button class="but">Logout</button></a> <br>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Contact</th>
+                        <th>User Type</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-active">
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.address }}</td>
+                        <td>{{ user.contact }}</td>
+                        <td>{{ user.user_type }}</td>
+                        <td><a href="{% url 'editUser' id=user.id %}"><button type="button" class="btn btn-secondary">Edit</button></a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <a href="{% url 'addDevice' id=user.id %}"><button class="addD">Add Device</button></a>
+        </div>
+        <div style="display: flex; justify-content: center;">
+            <div class="card-container">
+                {% for device in devices %}
+                    <div class="card" style="width: 18rem; background-color: #8EC5FC; background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);">
+                        <div class="card-body">
+                            <h5 class="card-title">Device:</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ device.name }} - {{ device.type }} - {{ device.price }}</h6>
+                            <h5 class="card-title">Location:</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ device.location.name }} - {{ device.location.address }} - {{ device.location.pin }}</h6>
+                            <a href="{% url 'editDevice' device.id %}" class="card-link"><button class="device">Edit Info</button></a>
+                            <a href="{% url 'deleteDevice' device.id %}" class="card-link"><button class="location">Delete Info</button></a>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="noDevice">
+                        <h3>No devices found.</h3>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+
+</div>
+
+{% comment %} <script>
+    function confirmDeletion() {
+        var confirmed = confirm("Are you sure you want to delete the user and its associated data?");
+        if (confirmed) {
+            // Submit the form if the user confirms
+            document.getElementById("delete-form").submit();
+        } else {
+            // Cancel the deletion
+            // You can redirect the user to a relevant URL or perform any other action here
+        }
+    }
+</script> {% endcomment %}
+</body>
+</html>

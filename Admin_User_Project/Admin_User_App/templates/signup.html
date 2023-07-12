@@ -1,0 +1,465 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-X: hidden;
+            background-image: linear-gradient(-20deg, #dcb0ed 0%, #99c99c 100%);
+            background-repeat: no-repeat;
+            background-size: cover:
+        }
+          
+        .overlay {
+            width: 80vw;
+            margin-bottom: 3.9%;
+            border-radius: 150px;
+            background-size: 3px 3px;
+            z-index: 2;
+        }
+          
+        .myform{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+          
+        .outer, h1{
+            padding-top: .5em;
+            padding-bottom: 1em;
+        }
+          
+        .inputFeild{
+            position: absolute;
+            left: 36.5%;
+            height: 30px;
+            width: 250px;
+            top: 12em;
+            border-radius: 30px;
+        }
+          
+        .fontStyle{
+            position: absolute;
+            color: #333;
+            background-color: #e4d7d7;
+            padding-top: 11px;
+            height: 38px;
+            border-right: 1px solid #cccccc;
+            text-align: center;
+            width: 50px;
+        }
+          
+        .input-control .error {
+            color: #ff3860;
+            font-size: 9px;
+            height: 13px;
+        }
+          
+        .textColor{
+            color: #ff3860;
+        }
+          
+        .textColores{
+            color: #16c565;
+        }
+          
+        .dropdown-group {
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: auto;
+            margin-top: 3rem;
+        }
+          
+        #validation-message{
+            color: #ff3860;
+        }
+          
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+          
+        .pdf-file-validation-message{
+            padding-left: 4em;
+        }
+          
+        .password-input {
+            position: relative;
+        }
+          
+        .password-toggle-icon {
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+          
+        .captcha-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+          
+        .captcha-code {
+            font-size: 36px;
+            font-weight: bold;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+          
+        .refresh-btn {
+            background-color: #3498db;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+          
+        .refresh-btn:hover {
+            background-color: #2980b9;
+        }
+          
+        #phone-error{
+            color: red;
+        }
+          
+        #phone-success{
+            color: #16c565;
+            font-size: 14px;
+        }
+          
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+          
+        a{
+            text-decoration: none;
+        }
+          
+        #message{
+            color: red;
+        }
+        .but{
+            width: 150px;
+            height: 50px;
+            background: linear-gradient(180deg, #51D2FC 0%, #0099DC 100%);
+            border-radius: 10rem;
+            font-size: 16px;
+            line-height: 1.6rem;
+            margin-right: 1vw;
+        }
+    </style>
+</head>
+<body>
+    <div class="container overlay">
+        <div class="row">
+            <h1 class="text-dark text-center" style="margin-bottom: -.5em;">Signup Page</h1>
+            <form id="form" onsubmit="validate()" method="post">
+                {% csrf_token %}
+                <div class="col-md-8 offset-2 myform">
+                    <div class="col-md-6">
+                        <div class="row align-items-center mb-3 px-3">
+                            <label for="firstname" class="col-form-label text-dark h1">First Name: </label>
+                            <div class="col-12"><span><i class="fa-solid fa-user fontStyle" aria-hidden="true" ></i> </span>
+                                <input id="fname" onkeyup="firstName()" name="fname" class="form-control" type="text"placeholder="Enter First Name...."autocomplete="off" style="color: black; padding-left: 3.2em;" required>
+                                <div class="error"></div>
+                                <span id="firstName" class="textColor"></span>
+                            </div>
+                        </div> 
+                        <div class="row align-items-center mb-3 px-3">
+                            <label for="lastname" class="col-form-label text-dark h1">Last Name: </label>
+                            <div class="col-12"><span><i class="fa-solid fa-user fontStyle" aria-hidden="true"></i>  </span>
+                                <input id="lname" onkeyup="lastName()" name="lname" type="text" autocomplete="off" required  class="form-control" placeholder="Enter Last Name...." autocomplete="off" style="color: black; padding-left: 3.2em;">
+                                <div class="error"></div>
+                                <span id="lastName" class="textColor"></span>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-3 px-3">
+                            <label for="email" class="col-form-label text-dark h1">Email: </label>
+                            <div class="col-12"><span><i class="fa-solid fa-envelope-circle-check fontStyle" aria-hidden="true" ></i>  </span>
+                                <input id="email" onkeyup="emailFunc()" name="email" type="text" autocomplete="off" required  class="form-control" placeholder="Enter Email...." autocomplete="off" style="color: black; padding-left: 3.2em;">
+                                <div class="error"></div>
+                                <span id="emailFunc" class="textColor"></span>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-3 px-3">
+                            <label for="language-dropdown" class="col-form-label text-dark h1">User Type: </label>
+                            <div class="col-12 mt-1"><span><i class="fa-solid fa-users fontStyle" aria-hidden="true" ></i>  </span>
+                                <select id="language-dropdown" class="form-control" name="user_type" onkeyup="validateLanguageSelection()" style="padding-left: 3.2em;">
+                                    <option value="">----Please select ---- </option>
+                                    <option value="admin">Admin</option>
+                                    <option value="user">User</option>
+                                </select>
+                            </div>
+                        </div>   
+                        <div class="row align-items-center mb-3 px-3">
+                            <label for="password" class="col-form-label text-dark h1"> Password </label>
+                            <div class="col-12"><span><i class="fa-solid fa-lock-open fontStyle" aria-hidden="true" ></i>  </span>
+                                <input id="password"name="password" type="password" onkeyup="passwordValidation()" required class="form-control" placeholder="Enter Password...." style="color: black; padding-left: 3.2em;">
+                                <i class="fa fa-eye-slash password-toggle-icon float-end" onclick="togglePasswordVisibility()"   style="margin-top: -1.2em; padding-right: 1em;"></i>
+                                <span id="passVal" class="textColor"></span>
+                                <div class="error"></div>
+                            </div>
+                        </div>  
+                        <div class="row align-items-center px-3">
+                            <label for="password" class="col-form-label text-dark h1"> Confirm Password </label>
+                            <div class="col-12"><span><i class="fa-solid fa-key fontStyle" aria-hidden="true" ></i>  </span>
+                                <input id="password2"name="password2" onkeyup="passwordValidation2()" type="password" required class="form-control" placeholder="Enter Password Again...." style="color: black; padding-left: 3.2em;">
+                                <div class="error"></div>
+                                <i class="fa fa-eye-slash password-toggle-icon float-end" onclick="togglePasswordVisibility()" style="margin-top: -1.2em; padding-right: 1em;"></i>
+                                <span id="passVal2" class="textColor"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 offset-2 py-3 px-3">
+                        <button type="submit" class="but">Submit</button>
+                    </div>
+                    <div class="col-md-8 offset-2 px-3">
+                        <p>Already have an account? <a href="{% url 'login' %}">Login!</a></p>
+                    </div>
+                </div>  
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('form');
+
+        function validate(){
+            if (firstnb==false){
+                alert('first name is invalid');
+                return false;
+            }
+            else if (lastnb==false){
+                alert('Last name is invalid');
+                return false;
+            }else if(enb == false){
+                alert('email is invalid');
+                return false;
+            }
+            else if( passnb == false){
+                alert('Password is invalid');
+                return false;
+            }else if(passnbcon == false){
+                alert('Confirm Password is invalid');
+                return false;
+            } else if(passnbcon != passnb){
+                alert('Confirm Password does not matched');
+                return false;
+            } else{
+
+                return true;
+            }
+        }
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const isValid = validate();
+            if (isValid) {
+                form.submit();
+            }
+        });
+
+        let firstnb = false;
+        let lastnb = false;
+        let enb = false;
+        let passnb = false;
+        let passnbcon = false;
+        let addnb = false;
+
+        function firstName(){
+            const fname = document.getElementById('fname').value;
+            let len = fname.length;
+            let input = document.getElementById("fname");
+            input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1);
+            const re = /^[A-Z](?!.*([a-zA-Z])\1{2,})(?=.*([a-zA-Z])\1)[a-zA-Z][\p{Lu}\p{L}\s.'-]{0,50}$/u;  
+            if(len >= 20){
+                document.getElementById('firstName').innerHTML = 'Name Should Be 20 Character';
+                firstnb = false;
+            }else if(len <= 0){
+                document.getElementById('firstName').innerHTML = 'White Space Not Allowed'
+                firstnb = false;
+            }else if(len <= 2){
+                document.getElementById('firstName').innerHTML = 'Name Contain More Than 2 Character'
+                firstnb = false;
+            }else if(re.test(fname)){
+                document.getElementById('firstName').innerHTML = '';
+                firstnb = true;
+            }else{
+                document.getElementById('firstName').innerHTML = 'Invalid Name';
+                firstnb = false;
+            }
+        }
+        fname.addEventListener("keydown", (e) => {
+          if ((fname.selectionStart===0 && e.keyCode ===32) || /[^\w\s]/.test(e.key) || /\d/.test(e.key)) {
+            e.preventDefault();
+          }
+        });
+
+        function lastName(){
+            const lname = document.getElementById('lname').value;
+            let len = lname.length;
+            let input = document.getElementById("lname");
+            const inputValue = input.value;
+            if (inputValue.includes(".")) {
+              input.disabled = true;
+            } else {
+              input.disabled = false;
+            }
+            input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1);
+            const re = /^(?!.*([a-zA-Z.])\1{1,})(?=.*([a-zA-Z.])\1)[a-zA-Z.]{0,15}$/gm;
+            if(len >= 15){
+                document.getElementById('lastName').innerHTML = 'Name Should Be 15 Character';
+                lastnb = false;
+            }else if(len <= 0){
+                document.getElementById('lastName').innerHTML = 'Last Name Enter At Least 1 character'
+                lastnb = false;
+            }else if(re.test(lname)){
+                document.getElementById('lastName').innerHTML = '';;
+                lastnb = true;
+            }else{
+                document.getElementById('lastName').innerHTML = 'Invalid Name';
+                lastnb = false;
+            }
+        }
+        lname.addEventListener('keydown', (e) =>{
+            if(e.key === ' '){
+                e.preventDefault();
+            }
+        });
+        lname.addEventListener("keydown", (e) => {
+          if ((lname.selectionStart===0 && e.keyCode ===32) ||  /\d/.test(e.key)) {
+            e.preventDefault();
+          }
+        });
+
+        function emailFunc(){
+            const email = document.getElementById('email').value;
+            const reg = /^[^@\s]+@((?!subdomain\.com\.com)(?:(?!co\.in|ac\.in|gov\.in|org\.in)[^.\s])+\.([^.\s]{2,}|co\.in|ac\.in|gov\.in|org\.in))$/; 
+            if(reg.test(email)){
+                document.getElementById('emailFunc').innerHTML = '';
+                enb = true;
+            }else if(email.charAt(0) === ' '){
+                document.getElementById('emailFunc').innerHTML = 'space not accept'
+                enb = false;
+            }
+            else{
+                document.getElementById('emailFunc').innerHTML = 'Invalid Email';
+                enb = false;
+            }
+        }
+        email.addEventListener('keydown', (e) =>{
+            if(e.key === ' '){
+                e.preventDefault();
+            }
+        });
+
+        const languageRegex = /^(admin|user)$/; 
+
+        function validateLanguageSelection() {
+            const dropdown = document.getElementById("language-dropdown");
+            const selectedValue = dropdown.value;
+            if (languageRegex.test(selectedValue)) {
+                dropdown.classList.remove("error");
+            } else {
+                dropdown.classList.add("error");
+            }
+        }
+
+        function passwordValidation(){
+            const password = document.getElementById('password').value;
+            const reg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$/;
+            if(reg.test(password)){
+                document.getElementById('passVal').innerHTML = '';
+                passnb = true;
+            } else if (password.length > 16) {
+                document.getElementById('passVal').innerHTML = 'Password should not exceed more than 16 characters.';
+                passnb = false;
+            } else{
+                document.getElementById('passVal').innerHTML = 'Password content minimum 8 Character Combination of Password is One Upper Case latter and 1 special Character are required';
+                passnb = false;
+            } 
+            return password
+        }
+
+        const passwordToggle = document.querySelectorAll(".password-toggle-icon");
+            function togglePasswordVisibilityPass() {  
+                var passwordToggle = document.getElementsByClassName("password-toggle");
+                var password = document.getElementById("password");
+                var password2 = document.getElementById("password2");
+                for (let icon of passwordToggle) {
+                    if (icon.classList.contains("fa-eye-slash")) {
+                        icon.classList.remove("fa-eye-slash");
+                        icon.classList.add("fa-eye");
+                        password.type = "text";
+                        password2.type = "text";
+                    } else {
+                        icon.classList.remove("fa-eye");
+                        icon.classList.add("fa-eye-slash");
+                        password.type = "password";
+                        password2.type = "password";
+                    }
+                }
+            }
+
+        function passwordValidation2(){
+            const password = document.getElementById('password').value;
+            const password2 = document.getElementById('password2').value;
+            if(password === password2){
+                document.getElementById('passVal2').innerHTML = '';
+                passnbcon = true;
+            }else if(!(password.length === password2.length)){
+                document.getElementById('passVal2').innerHTML = 'Password & Confirm Password not match';
+                passnbcon = false;
+            }
+        }
+
+        const passwordToggleIcons = document.querySelectorAll(".password-toggle-icon");
+            function togglePasswordVisibility() {  
+                var passwordToggle = document.getElementsByClassName("password-toggle");
+                var password = document.getElementById("password");
+                var password2 = document.getElementById("password2");
+                for (let icon of passwordToggleIcons) {
+                    if (icon.classList.contains("fa-eye-slash")) {
+                        icon.classList.remove("fa-eye-slash");
+                        icon.classList.add("fa-eye");
+                        password.type = "text";
+                        password2.type = "text";
+                    } else {
+                        icon.classList.remove("fa-eye");
+                        icon.classList.add("fa-eye-slash");
+                        password.type = "password";
+                        password2.type = "password";
+                    }
+                }
+            }
+
+    </script>
+
+    {% if alert_message %}
+    <script>
+        alert("{{ alert_message }}");
+    </script>
+    {% endif %}
+
+    <script src="./form.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>  
+</body>
+</html>
